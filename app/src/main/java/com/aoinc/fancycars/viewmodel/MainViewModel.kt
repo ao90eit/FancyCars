@@ -1,24 +1,18 @@
 package com.aoinc.fancycars.viewmodel
 
 //import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aoinc.fancycars.data.model.CarAvailability
-import com.aoinc.fancycars.data.model.FancyCar
-import com.aoinc.fancycars.network.ApiStub
+import com.aoinc.fancycars.data.model.CarAndAvailability
+import com.aoinc.fancycars.data.repository.CarRepository
 
 class MainViewModel : ViewModel() {
 
-    val carList = MutableLiveData<List<FancyCar>>()
-    val carAvailabilityList = MutableLiveData<List<CarAvailability>>()
+    private val carList = MutableLiveData<List<CarAndAvailability>>()
+    val carListData: LiveData<List<CarAndAvailability>> = carList
 
-    suspend fun getCarList() {
-        carList.postValue(ApiStub.getAllCars())
-//        Log.d("TAG_X", "all cars got")
-//        Log.d("TAG_X", "end of car list func")
-    }
-
-    suspend fun getCarAvailabilityList() {
-       carAvailabilityList.postValue(ApiStub.getCarAvailabilityList())
+    suspend fun getCars() {
+        carList.postValue(CarRepository.getCarAndAvailability())
     }
 }

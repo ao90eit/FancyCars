@@ -18,8 +18,7 @@ class MainActivity : AppCompatActivity() {
         MainScope().launch {
             withContext(Dispatchers.IO) {
 //                delay(1000)
-                mainViewModel.getCarList()
-                mainViewModel.getCarAvailabilityList()
+                mainViewModel.getCars()
             }
 
 //            Log.d("TAG_X", "in launch")
@@ -27,8 +26,8 @@ class MainActivity : AppCompatActivity() {
 
 //        Log.d("TAG_X", "after launch")
 
-        mainViewModel.carAvailabilityList.observe(this, {
-            Log.d("TAG_X", "${it[1]}")
+        mainViewModel.carListData.observe(this, {
+            Log.d("TAG_X", "${it[0].availability.available}")
         })
     }
 }

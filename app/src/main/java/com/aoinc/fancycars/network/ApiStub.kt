@@ -9,7 +9,6 @@ object ApiStub {
     private val carAvailabilityList: MutableList<CarAvailability> = mutableListOf()
 
     suspend fun getAllCars(): List<FancyCar> {
-
         if (carsList.size == 0) {
             makeCars()
         }
@@ -17,11 +16,8 @@ object ApiStub {
         return carsList
     }
 
-    suspend fun getCarAvailabilityList(): List<CarAvailability>  = carAvailabilityList
-
-//    suspend fun getCarAvailability(carId: Int): CarAvailability{
-//        return carAvailabilityList.single { it.id == carId }
-//    }
+    suspend fun getCarAvailability(carId: Int): CarAvailability =
+        carAvailabilityList.first { it.carId == carId }
 
     private fun makeCars() {
         carsList.add(

@@ -3,9 +3,9 @@ package com.aoinc.fancycars.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+
 data class CarAvailability(
-    @PrimaryKey val carId: Int,
+    val carId: Int,
     val available: String
 )
 
