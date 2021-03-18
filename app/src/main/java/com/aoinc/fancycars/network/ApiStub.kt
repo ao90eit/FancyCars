@@ -37,6 +37,12 @@ object ApiStub {
             FancyCar(3, "https://tinyurl.com/2kbd5c82", "LIGHTNING", "Fast",
             "Car", 2023)
         )
-        carAvailabilityList.add(CarAvailability(3, "In Dealership"))
+        carAvailabilityList.add(CarAvailability(3, "Unavailable"))
+
+        carsList.add(
+            FancyCar(4, "https://tinyurl.com/df48zbr8", "XXXXX", "Comfortable",
+                "Sedan", 1667)
+        )
+        carAvailabilityList.add(CarAvailability(4, "In Dealership"))
     }
 }

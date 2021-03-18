@@ -1,13 +1,14 @@
 package com.aoinc.fancycars
 
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.ActionMenuView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.aoinc.fancycars.view.adapter.FancyCarRVAdapter
 import com.aoinc.fancycars.viewmodel.MainViewModel
-import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,8 +27,12 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.getCars()
         mainViewModel.carListData.observe(this, {
             fancyCarRVAdapter.updateList(it)
-            sortCarsByAvailability()
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.sort_menu, menu)
+        return true
     }
 
     fun sortCarsByName() {
@@ -36,5 +41,13 @@ class MainActivity : AppCompatActivity() {
 
     fun sortCarsByAvailability() {
         fancyCarRVAdapter.sortByAvailability()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.sort_name -> { sortCarsByName(); true }
+            R.id.sort_availability -> { sortCarsByAvailability(); true }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
