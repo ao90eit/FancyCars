@@ -21,22 +21,22 @@ object ApiStub {
 
     private fun makeCars() {
         carsList.add(
-            FancyCar(1, "http://xxxxx", "car1", "make1",
-        "model1", 2021)
+            FancyCar(1, "https://tinyurl.com/5aryr3rz", "MATER", "Old",
+        "Truck", 2021)
         )
         carAvailabilityList.add(CarAvailability(1, "In Dealership"))
 
 
         carsList.add(
-            FancyCar(2, "http://xxxxx", "car2", "make2",
-            "model2", 2022)
+            FancyCar(2, "https://tinyurl.com/df48zbr8", "SALLY", "Comfortable",
+            "Sedan", 2022)
         )
         carAvailabilityList.add(CarAvailability(2, "Out of Stock"))
 
         carsList.add(
-            FancyCar(3, "http://xxxxx", "car3", "make3",
-            "model3", 2023)
+            FancyCar(3, "https://tinyurl.com/2kbd5c82", "LIGHTNING", "Fast",
+            "Car", 2023)
         )
-        carAvailabilityList.add(CarAvailability(3, "Unavailable"))
+        carAvailabilityList.add(CarAvailability(3, "In Dealership"))
     }
 }
