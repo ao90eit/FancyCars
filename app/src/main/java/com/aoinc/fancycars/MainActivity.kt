@@ -1,6 +1,7 @@
 package com.aoinc.fancycars
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ActionMenuView
@@ -10,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aoinc.fancycars.view.adapter.FancyCarRVAdapter
 import com.aoinc.fancycars.viewmodel.MainViewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FancyCarRVAdapter.OnVisibleDelegate {
 
     private val mainViewModel by viewModels<MainViewModel>()
 
     private lateinit var carRecyclerView: RecyclerView
-    private val fancyCarRVAdapter = FancyCarRVAdapter(mutableListOf())
+    private val fancyCarRVAdapter = FancyCarRVAdapter(mutableListOf(), this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,11 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.getCars()
         mainViewModel.carListData.observe(this, {
             fancyCarRVAdapter.updateList(it)
+        })
+
+        mainViewModel.carAvailabilityData.observe(this, {
+            Log.d("TAG_D", "in observe - ${it.carId}")
+            fancyCarRVAdapter.updateItem(it)
         })
     }
 
@@ -49,5 +55,9 @@ class MainActivity : AppCompatActivity() {
             R.id.sort_availability -> { sortCarsByAvailability(); true }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun getAvailability(carId: Int) {
+        mainViewModel.getAvailability(carId)
     }
 }

@@ -8,5 +8,5 @@ import androidx.room.PrimaryKey
 data class CarAndAvailability(
     @PrimaryKey val primaryId: Int,
     @Embedded val fancyCar: FancyCar,
-    @Embedded val availability: CarAvailability
+    @Embedded var availability: CarAvailability?
 )

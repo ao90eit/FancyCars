@@ -15,9 +15,9 @@ object CarRepository {
         resultListCar = if(CheckNetworkAvailability.networkIsAvailable()) {
             val carList = getCarList()
             carList.map {
-                val availability = getAvailability(it.fancyId)
-                //combinedList.add(CarAndAvailability(it.fancyId, it, availability))
-                insertCarFromRemote(CarAndAvailability(it.fancyId, it, availability))
+//                val availability = getAvailability(it.fancyId)
+//                insertCarFromRemote(CarAndAvailability(it.fancyId, it, availability))
+                insertCarFromRemote(CarAndAvailability(it.fancyId, it, null))
             }
             getCarCache()
         }else{
@@ -33,5 +33,9 @@ object CarRepository {
     }
     private suspend fun getCarCache(): List<CarAndAvailability> =
         CarApplication.dao.getAllFancyCars()
+
+    suspend fun getCarAvail(id: Int): CarAvailability {
+        return getAvailability(id)
+    }
 
 }

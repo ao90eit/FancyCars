@@ -9,17 +9,32 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.aoinc.fancycars.R
 import com.aoinc.fancycars.data.model.CarAndAvailability
+import com.aoinc.fancycars.data.model.CarAvailability
 import com.aoinc.fancycars.data.model.FancyCar
 import com.aoinc.fancycars.view.adapter.FancyCarRVAdapter.CarViewHolder
 import com.bumptech.glide.Glide
 import com.google.android.material.textview.MaterialTextView
 
-class FancyCarRVAdapter(private var carList: List<CarAndAvailability>)
+class FancyCarRVAdapter(
+    private var carList: List<CarAndAvailability>,
+    private var onVisibleDelegate: OnVisibleDelegate
+)
     : RecyclerView.Adapter<CarViewHolder>() {
 
     fun updateList(newList: List<CarAndAvailability>) {
         carList = newList
         notifyDataSetChanged()
+    }
+
+    fun updateItem(avail: CarAvailability) {
+        Log.d("TAG_D", "in update - ${avail.carId}")
+        val index = carList.indexOfFirst { it.primaryId == avail.carId }
+        carList[index].availability = avail
+        notifyItemChanged(index)
+    }
+
+    interface OnVisibleDelegate {
+        fun getAvailability(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder =
@@ -28,6 +43,12 @@ class FancyCarRVAdapter(private var carList: List<CarAndAvailability>)
 
     override fun onBindViewHolder(holder: CarViewHolder, position: Int) {
         val car = carList[position]
+
+        // fix load before view
+        car.availability?.let {} ?: {
+            onVisibleDelegate.getAvailability(car.primaryId)
+            Log.d("TAG_X", "getting availability for car #${car.primaryId}")
+        }()
 
         holder.apply {
 
@@ -41,17 +62,24 @@ class FancyCarRVAdapter(private var carList: List<CarAndAvailability>)
             carText.text = "${car.fancyCar.name} ${car.fancyCar.make} ${car.fancyCar.model}"
             carYear.text = car.fancyCar.year.toString()
 
-            when (car.availability.available) {
-                "In Dealership" -> {
-                    buyButton.visibility = View.VISIBLE
-                    carAvailabilty.visibility = View.INVISIBLE
+            car.availability?.let {
+                when (it.available) {
+                    "In Dealership" -> {
+                        buyButton.visibility = View.VISIBLE
+                        carAvailabilty.visibility = View.INVISIBLE
+                    }
+                    else -> {
+                        buyButton.visibility = View.INVISIBLE
+                        carAvailabilty.visibility = View.VISIBLE
+                        carAvailabilty.text = it.available
+                    }
                 }
-                else -> {
-                    buyButton.visibility = View.INVISIBLE
-                    carAvailabilty.visibility = View.VISIBLE
-                    carAvailabilty.text = car.availability.available
-                }
-            }
+            } ?: {
+                buyButton.visibility = View.INVISIBLE
+                carAvailabilty.visibility = View.VISIBLE
+                carAvailabilty.text = "loading"
+            }()
+
         }
     }
 
@@ -63,7 +91,7 @@ class FancyCarRVAdapter(private var carList: List<CarAndAvailability>)
     }
 
     fun sortByAvailability() {
-        carList = carList.sortedBy { it.availability.available != "In Dealership" }
+        carList = carList.sortedBy { it.availability?.available != "In Dealership" }
         notifyDataSetChanged()
     }
 
